@@ -8,7 +8,7 @@
 #include <mruby/error.h>
 #include <mruby-aux.h>
 #include <mruby-aux/string/growup.h>
-#include <mruby-aux/string/hexdigest.h>
+#include <mruby-aux/string.h>
 #include <mruby-aux/scanhash.h>
 #include <mruby-aux/fakedin.h>
 #include <string.h>
