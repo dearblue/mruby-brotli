@@ -33,7 +33,7 @@ MRuby::Gem::Specification.new("mruby-brotli") do |s|
     end if false
 
     dirp = dir.gsub(/[\[\]\{\}\,]/) { |m| "\\#{m}" }
-    files = "contrib/brotli/c/**/*.c"
+    files = "contrib/brotli/c/{common,dec,enc}/**/*.c"
     objs.concat(Dir.glob(File.join(dirp, files)).map { |f|
       next nil unless File.file? f
       objfile f.relative_path_from(dir).pathmap("#{build_dir}/%X")
