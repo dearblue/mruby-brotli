@@ -12,6 +12,12 @@
 #include <mruby-aux/scanhash.h>
 #include <mruby-aux/fakedin.h>
 #include <string.h>
+#include <strings.h>
+#include <limits.h>
+
+#ifndef SSIZE_MAX
+# define SSIZE_MAX ((ssize_t)(SIZE_MAX >> 1))
+#endif
 
 #define MIN(A, B)                   ((A) < (B) ? (A) : (B))
 
