@@ -163,7 +163,7 @@ aux_brotli_decoder_error(MRB, BrotliDecoderResult ok)
     mrb_raisef(mrb, E_RUNTIME_ERROR,
                "failed BrotliDecoderDecompressStream() - %S (0x%S)",
                aux_brotli_decoder_result_string(mrb, ok),
-               mrbx_str_new_as_hexdigest(mrb, ok, 4));
+               VALUE(mrbx_str_new_as_hexdigest(mrb, ok, 4)));
 }
 
 /* module Brotli::Constants */
