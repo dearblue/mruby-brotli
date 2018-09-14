@@ -19,7 +19,7 @@ MRuby::Gem::Specification.new("mruby-brotli") do |s|
     #cc.flags << "-Wno-missing-braces"
   end
 
-  if cc.defines.flatten.any?(/\AHAVE_BROTLI(?=\z|=(.+))/) && ($1.nil? || $1.empty? || $1.to_i > 0)
+  if cc.defines.flatten.any? { |d| d =~ /\AHAVE_BROTLI(?=\z|=(.+))/ && ($1.nil? || $1.empty? || $1.to_i > 0) }
     cc.include_paths << "/usr/local/include"
 
     linker.library_paths << "/usr/local/lib"
