@@ -187,10 +187,7 @@ end
       * [mruby-aux](https://github.com/dearblue/mruby-aux)
         under [2 clause BSD License](https://github.com/dearblue/mruby-aux/blob/master/LICENSE)
         by [dearblue](https://github.com/dearblue)
-      * [mruby-aux-scanhash](https://github.com/dearblue/mruby-aux-scanhash)
-        under [Creative Commons Zero License \(CC0\)](https://github.com/dearblue/mruby-aux-scanhash/blob/master/LICENSE)
-        by [dearblue](https://github.com/dearblue)
   * Bundled C libraries (git-submodules):
-      * [brotli](https://github.com/google/brotli)-[1.0.2](https://github.com/google/brotli/blob/v1.0.2)
+      * [brotli](https://github.com/google/brotli)-[1.0.7](https://github.com/google/brotli/blob/v1.0.7)
         under [MIT License](https://github.com/google/brotli/blob/v1.0.2/LICENSE)
         by [Google](https://github.com/google)
