@@ -7,7 +7,6 @@ MRuby::Gem::Specification.new("mruby-brotli") do |s|
   s.author  = "dearblue"
   s.homepage = "https://github.com/dearblue/mruby-brotli"
 
-  add_dependency "mruby-error",         core: "mruby-error"
   add_dependency "mruby-string-ext",    core: "mruby-string-ext"
   add_dependency "mruby-aux",           github: "dearblue/mruby-aux"
 
