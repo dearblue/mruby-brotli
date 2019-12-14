@@ -593,7 +593,7 @@ init_encoder(MRB, struct RClass *mBrotli)
 struct decoder
 {
     BrotliDecoderState *brotli;
-    struct mrbx_fakedin inport;
+    VALUE inport;
     const char *nextin;
     size_t availin;
     size_t total_out;
@@ -644,7 +644,7 @@ dec_s_new(MRB, VALUE self)
 
     //BrotliDecoderSetParameter(p->brotli, BROTLI_DECODER_PARAM_DISABLE_RING_BUFFER_REALLOCATION, BROTLI_TRUE);
 
-    p->inport.stream = Qnil;
+    p->inport = Qnil;
     p->total_out = 0;
     p->status = BROTLI_DECODER_RESULT_NEEDS_MORE_INPUT;
 
@@ -663,7 +663,7 @@ dec_initialize(MRB, VALUE self)
     VALUE inport;
     mrb_get_args(mrb, "o", &inport);
 
-    mrbx_fakedin_setup(mrb, self, &p->inport, inport);
+    p->inport = mrbx_fakedin_new(mrb, inport);
     p->status = BROTLI_DECODER_RESULT_NEEDS_MORE_INPUT;
 
     return self;
@@ -703,7 +703,7 @@ dec_decode_partial(MRB, VALUE self, struct decoder *p, char *dest, ssize_t size)
 
     while ((intptr_t)dest < destend) {
         if (p->status == BROTLI_DECODER_RESULT_NEEDS_MORE_INPUT) {
-            p->availin = (size_t)mrbx_fakedin_read(mrb, self, &p->inport, &p->nextin, EXT_PARTIAL_READ_SIZE);
+            p->availin = (size_t)mrbx_fakedin_read(mrb, p->inport, &p->nextin, EXT_PARTIAL_READ_SIZE);
         }
 
         if ((mrb_int)p->availin < 0) {
@@ -810,7 +810,7 @@ dec_total_in(MRB, VALUE self)
 {
     mrb_get_args(mrb, "");
 
-    return mrb_fixnum_value(mrbx_fakedin_total_in(&getdecoder(mrb, self)->inport));
+    return mrb_fixnum_value(mrbx_fakedin_total_in(mrb, getdecoder(mrb, self)->inport));
 }
 
 static VALUE
@@ -826,7 +826,7 @@ dec_get_inport(MRB, VALUE self)
 {
     mrb_get_args(mrb, "");
 
-    return getdecoder(mrb, self)->inport.stream;
+    return mrbx_fakedin_stream(mrb, getdecoder(mrb, self)->inport);
 }
 
 static void
