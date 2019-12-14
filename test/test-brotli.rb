@@ -259,6 +259,16 @@ assert("streaming Brotli::Decoder (huge#1)") do
   end
 end
 
+if MRUBY_RELEASE_NO < 20100
+  def wrap_assert
+    yield
+  end
+else
+  def wrap_assert
+    assert { yield }
+  end
+end
+
 assert("streaming Brotli::Decoder (huge#2)") do
   skip "[mruby is build with MRB_INT16]" if is_mrb16
 
@@ -271,13 +281,15 @@ assert("streaming Brotli::Decoder (huge#2)") do
   off = 0
   slicesize = 3
   until brotli.finished?
-    assert_equal off, brotli.total_out
-    slicesize2 = [slicesize, a16777215_size - brotli.total_out].min
-    rbuf = nil
-    assert_nothing_raised { rbuf = brotli.read(slicesize) }
-    assert_equal ("a" * slicesize2).hash, rbuf.hash
-    off += slicesize
-    slicesize = slicesize * 2 + 3
+    wrap_assert do
+      assert_equal off, brotli.total_out
+      slicesize2 = [slicesize, a16777215_size - brotli.total_out].min
+      rbuf = nil
+      assert_nothing_raised { rbuf = brotli.read(slicesize) }
+      assert_equal ("a" * slicesize2).hash, rbuf.hash
+      off += slicesize
+      slicesize = slicesize * 2 + 3
+    end
   end
 
   assert_equal nil.hash, brotli.read(slicesize).hash
