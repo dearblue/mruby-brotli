@@ -706,7 +706,7 @@ dec_decode_partial(MRB, VALUE self, struct decoder *p, char *dest, ssize_t size)
             p->availin = (size_t)mrbx_fakedin_read(mrb, p->inport, &p->nextin, EXT_PARTIAL_READ_SIZE);
         }
 
-        if ((mrb_int)p->availin < 0) {
+        if ((ssize_t)p->availin < 0) {
             mrb_raise(mrb, E_RUNTIME_ERROR, "unexpected end of stream");
         }
 
