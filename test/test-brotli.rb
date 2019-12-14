@@ -239,7 +239,7 @@ assert("streaming Brotli::Decoder") do
   end
 end
 
-assert("streaming Brotli::Decoder (huge)") do
+assert("streaming Brotli::Decoder (huge#1)") do
   skip "[mruby is build with MRB_INT16]" if is_mrb16
 
   s = "123456789" * 1111111 + "ABCDEFG"
@@ -257,6 +257,10 @@ assert("streaming Brotli::Decoder (huge)") do
 
     assert_equal nil.hash, brotli.read(slicesize).hash
   end
+end
+
+assert("streaming Brotli::Decoder (huge#2)") do
+  skip "[mruby is build with MRB_INT16]" if is_mrb16
 
   a16777215_br = Brotli::Decoder.decode(a16777215_br_br)
   a16777215_size = 16777215
