@@ -1,59 +1,41 @@
 #!ruby
 
-MRuby::Build.new do |conf|
-  toolchain :clang
+require "yaml"
 
-  conf.build_dir = "host32"
+configure = YAML.load(<<-CONFIGURE)
+host:
+  defines:
+  - MRB_INT32
+  cflags:
+host16-nan:
+  defines:
+  - MRB_INT16
+  - MRB_NAN_BOXING
+  cflags:
+host-word:
+  defines:
+  - MRB_WORD_BOXING
+  cflags:
+CONFIGURE
 
-  if cc.command =~ /\b(?:g?cc|clang)\d*\b/
-    cc.flags << "-std=c11"
-    cc.flags << "-pedantic"
-    cc.flags << "-Wall"
+configure.each_pair do |name, c|
+  MRuby::Build.new(name) do |conf|
+    toolchain :clang
+
+    conf.build_dir = name
+
+    if cc.command =~ /\b(?:g?cc|clang)\d*\b/
+      cc.flags << "-std=c11" << "-pedantic" << "-Wall"
+    end
+
+    enable_debug
+    enable_test
+
+    gem core: "mruby-sprintf"
+    gem core: "mruby-print"
+    gem core: "mruby-bin-mrbc"
+    gem core: "mruby-bin-mirb"
+    gem core: "mruby-bin-mruby"
+    gem File.dirname(__FILE__)
   end
-
-  cc.defines << "MRB_INT32"
-  #cc.defines << "MRUBY_BROTLI_WITH_SYSTEM_BROTLI=1"
-
-  enable_debug
-  enable_test
-
-  gem core: "mruby-print"
-  gem core: "mruby-bin-mrbc"
-  gem core: "mruby-bin-mirb"
-  gem core: "mruby-bin-mruby"
-  gem File.dirname(__FILE__)
-end
-
-MRuby::Build.new("host-nan16") do |conf|
-  toolchain :clang
-
-  conf.build_dir = conf.name
-
-  cc.defines << "MRB_NAN_BOXING"
-  cc.defines << "MRB_INT16"
-
-  enable_debug
-  enable_test
-
-  gem core: "mruby-print"
-  gem core: "mruby-bin-mrbc"
-  gem core: "mruby-bin-mruby"
-  gem File.dirname(__FILE__)
-end
-
-MRuby::Build.new("host-word") do |conf|
-  toolchain :clang
-
-  conf.build_dir = conf.name
-
-  cc.defines << "MRB_WORD_BOXING"
-  cc.defines << "MRB_INT64" if [nil].pack("P").bytesize == 8
-
-  enable_debug
-  enable_test
-
-  gem core: "mruby-print"
-  gem core: "mruby-bin-mrbc"
-  gem core: "mruby-bin-mruby"
-  gem File.dirname(__FILE__)
 end
