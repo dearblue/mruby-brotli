@@ -262,20 +262,23 @@ end
 assert("streaming Brotli::Decoder (huge#2)") do
   skip "[mruby is build with MRB_INT16]" if is_mrb16
 
-  a16777215_br = Brotli::Decoder.decode(a16777215_br_br)
+  a16777215_br = nil
+  assert_nothing_raised { a16777215_br = Brotli::Decoder.decode(a16777215_br_br) }
   a16777215_size = 16777215
   istream = Brotli::StringIO_mitaina_nanika.new(a16777215_br)
-  Brotli.decode(istream) do |brotli|
-    off = 0
-    slicesize = 3
-    until brotli.finished?
-      assert_equal off, brotli.total_out
-      slicesize2 = [slicesize, a16777215_size - brotli.total_out].min
-      assert_equal ("a" * slicesize2).hash, brotli.read(slicesize).hash
-      off += slicesize
-      slicesize = slicesize * 2 + 3
-    end
-
-    assert_equal nil.hash, brotli.read(slicesize).hash
+  brotli = nil
+  assert_nothing_raised { brotli = Brotli.decode(istream) }
+  off = 0
+  slicesize = 3
+  until brotli.finished?
+    assert_equal off, brotli.total_out
+    slicesize2 = [slicesize, a16777215_size - brotli.total_out].min
+    rbuf = nil
+    assert_nothing_raised { rbuf = brotli.read(slicesize) }
+    assert_equal ("a" * slicesize2).hash, rbuf.hash
+    off += slicesize
+    slicesize = slicesize * 2 + 3
   end
+
+  assert_equal nil.hash, brotli.read(slicesize).hash
 end
