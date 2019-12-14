@@ -18,7 +18,6 @@ MRuby::Build.new do |conf|
   enable_test
 
   cc.defines = %w(MRB_INT32)
-  cc.flags << "-Wall" << "-std=c11" << "-Wno-declaration-after-statement"
   cc.command = "gcc-7"
   cxx.command = "g++-7"
 
@@ -36,7 +35,6 @@ MRuby::Build.new("host64") do |conf|
   enable_test
 
   cc.defines = %w(MRB_INT64)
-  cc.flags << "-Wall" << "-std=c11" << "-Wno-declaration-after-statement"
   cc.command = "gcc-7"
   cxx.command = "g++-7"
 
@@ -54,7 +52,6 @@ MRuby::Build.new("host16") do |conf|
   enable_test
 
   cc.defines = %w(MRB_INT16)
-  cc.flags << "-Wall" << "-std=c11" << "-Wno-declaration-after-statement"
   cc.command = "gcc-7"
   cxx.command = "g++-7"
 
