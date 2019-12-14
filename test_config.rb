@@ -24,8 +24,9 @@ configure.each_pair do |name, c|
 
     conf.build_dir = name
 
-    if cc.command =~ /\b(?:g?cc|clang)\d*\b/
-      cc.flags << "-std=c11" << "-pedantic" << "-Wall"
+    if (d = c["defines"]) && !d.empty?
+      cc.defines << Array(d)
+      cxx.defines << Array(d)
     end
 
     enable_debug
